@@ -21,6 +21,7 @@ public class c1{
         SOP("");
         SOP("Possible functions:");
         SOP("q1\tQuestion 1");
+        SOP("q2\tQuestion 2");
         SOP("===============================");
         SOP("");
 
@@ -31,6 +32,7 @@ public class c1{
 
         String function = args[0];
         if(function.equals("q1")) q1(args);
+        else if(function.equals("q2")) q2(args);
         else SOP("ERROR: Unknown function");
     }
 
@@ -52,6 +54,19 @@ public static void q1(String[] args){
     }
 }
 
+public static void q2(String[] args){
+    //Question 1.2: Implement a function void reverse(Char *str) in C or C++ which reverses a
+    //null terminated string. This should be in place and should not use a temp variable.
+
+    //We will do this in java using char array. 
+    SOP("Running q2");
+    if(args.length != 2){
+        SOP("ERROR: Must specify string");
+        return;
+    }
+
+    SOP("String: \"" + args[1] + "\" reversed is: \"" + reverseStr(args[1].toCharArray()) + "\"");
+}
 
 
 public static boolean isAllUniqueChars(char[] str){
@@ -76,6 +91,40 @@ public static boolean isAllUniqueChars(char[] str){
         else return false; //meaning a bit was already set, so the string cannot contain all unique chars
     }
     return true;
+}
+
+public static String reverseStr(char[] str){
+    //The main part of this problem is how to swap two chars without using a temp variable
+    //If we could use a temp variable, it would simply be:
+    // temp = c1
+    //c1 = c2
+    //c2 = temp;
+
+    //The trick here is to use xor. xor is true if and only if the two bits are different
+    //0 ^ 0 = 0
+    //0 ^ 1 = 1
+    //1 ^ 0 = 1
+    //1 ^ 1 = 0
+
+    //Notice that if var1 is 1 and var2 is 0, I can do xor three times in the following manner 
+    //and I will have swapped their values without the need of a temp variable
+    //1. var1 ^= var2
+    //2. var2 ^= var1
+    //3. va1 ^= var2
+
+    //so first, var1 = 1 ^ 0 = 1
+    //next, var2 = 0 ^ 1 = 1
+    //finally var1 = 1 ^ 1 = 0
+    //var1 and var2 have swapped values
+
+    int length = str.length;
+    for(int i = 0; i<length/2; i++){
+        str[i] ^= str[length - 1 - i];
+        str[length -1 -i] ^= str[i];
+        str[i] ^= str[length - 1 - i];
+    }
+
+    return new String(str);
 }
 
 
