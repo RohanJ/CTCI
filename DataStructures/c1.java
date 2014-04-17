@@ -22,6 +22,7 @@ public class c1{
         SOP("Possible functions:");
         SOP("q1\tQuestion 1");
         SOP("q2\tQuestion 2");
+        SOP("q3\tQuestion 3");
         SOP("===============================");
         SOP("");
 
@@ -33,6 +34,7 @@ public class c1{
         String function = args[0];
         if(function.equals("q1")) q1(args);
         else if(function.equals("q2")) q2(args);
+        else if(function.equals("q3")) q3(args);
         else SOP("ERROR: Unknown function");
     }
 
@@ -66,6 +68,23 @@ public static void q2(String[] args){
     }
 
     SOP("String: \"" + args[1] + "\" reversed is: \"" + reverseStr(args[1].toCharArray()) + "\"");
+}
+
+public static void q3(String[] args){
+    //Question 1.3: Given two strings, write a method to decide if one is a permutation of the other
+
+    //Option 1: We can sort the two strings and then do equality check --> O(nlogn) run time O(1) space
+    //Option 2: We can use hash maps and do this instead in O(n) time and O(n) space
+    SOP("Running q3");
+    if(args.length != 3){
+        SOP("ERROR: Must speicfy two strings");
+        return;
+    }
+
+    if(isPermutation(args[1].toCharArray(), args[2].toCharArray()) == true)
+        SOP("String: \"" + args[1] + "\" and \"" + args[2] + "\" ARE permutations of each other");
+    else
+        SOP("String: \"" + args[1] + "\" and \"" + args[2] + "\" are NOT permutations of each other");
 }
 
 
@@ -125,6 +144,37 @@ public static String reverseStr(char[] str){
     }
 
     return new String(str);
+}
+
+public static boolean isPermutation(char[] str1, char[] str2){
+    //Hashmap is O(1) insert, read, and delete
+    //The idea here is to create a hashmap mapping of each char and its count (O(n) time)
+    //and then compare the counts for each char  between the two hash maps
+
+    if(str1.length != str2.length) return false;
+
+    HashMap<String, Integer> mHashMap1 = generateMapFromStr(str1);
+    HashMap<String, Integer> mHashMap2 = generateMapFromStr(str2);
+
+    for(Map.Entry<String, Integer> e : mHashMap1.entrySet()){
+        if(e.getValue() != mHashMap2.get(e.getKey())) return false;
+    }
+
+    return true;
+}
+
+public static HashMap<String, Integer> generateMapFromStr(char[] str){
+    HashMap<String, Integer> mHashMap = new HashMap<String, Integer>();
+    Integer count;
+    for(int i=0; i<str.length; i++){
+         count = mHashMap.get(String.valueOf(str[i]));
+        if(count == null){
+            count = 0;
+        }
+        mHashMap.put(String.valueOf(str[i]), count++);
+    }
+
+    return mHashMap;
 }
 
 
