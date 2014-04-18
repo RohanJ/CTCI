@@ -23,6 +23,7 @@ public class c1{
         SOP("q1\tQuestion 1");
         SOP("q2\tQuestion 2");
         SOP("q3\tQuestion 3");
+        SOP("q4\tQuestion 4");
         SOP("===============================");
         SOP("");
 
@@ -35,6 +36,7 @@ public class c1{
         if(function.equals("q1")) q1(args);
         else if(function.equals("q2")) q2(args);
         else if(function.equals("q3")) q3(args);
+        else if(function.equals("q4")) q4(args);
         else SOP("ERROR: Unknown function");
     }
 
@@ -77,7 +79,7 @@ public static void q3(String[] args){
     //Option 2: We can use hash maps and do this instead in O(n) time and O(n) space
     SOP("Running q3");
     if(args.length != 3){
-        SOP("ERROR: Must speicfy two strings");
+        SOP("ERROR: Must specify two strings");
         return;
     }
 
@@ -85,6 +87,29 @@ public static void q3(String[] args){
         SOP("String: \"" + args[1] + "\" and \"" + args[2] + "\" ARE permutations of each other");
     else
         SOP("String: \"" + args[1] + "\" and \"" + args[2] + "\" are NOT permutations of each other");
+}
+
+public static void q4(String[] args){
+    //Question 1.4: Write a method to replace all spaces in a string with '%20'.
+    //You may assume that the string has sufficient space at the end to hold the additional characters,
+    //and that you are given the "true" length of the string. (Note: if implementing in java, please use a character
+    //array so that you can perform this operation in place).
+    SOP("Running q4");
+    if(args.length != 2){
+        SOP("ERROR: Must specify string");
+        return;
+    }
+
+    char[] str = args[1].toCharArray();
+    str = replaceSpacesInStr(str, str.length);
+    if(str == null){
+        SOP("ERROR: Insufficient space OR no spaces in string");
+        return;
+    }
+
+    System.out.print("String: \"" + args[1] + "\" replaced is \"");
+    System.out.print(str);
+    SOP("\"");
 }
 
 
@@ -175,6 +200,53 @@ public static HashMap<String, Integer> generateMapFromStr(char[] str){
     }
 
     return mHashMap;
+}
+
+public static char[] replaceSpacesInStr(char[] str, int true_length){
+    System.out.print("\"");
+    System.out.print(str);
+    SOP("\"");
+    SOP(true_length);
+    
+    //first get pos of last char
+    //then we'll go through and figure out num spaces from start to last char
+    //if true_length != (last_char_pos+1) + (2*num_spaces) then return meaning not enough space
+    //if there is enough space,  then we work from the end of the string and copy over one by one
+    //when we encounter space, we write %20
+
+    int last_char_pos = true_length -1;
+    for(int i = true_length - 1; i>=0; i--){
+        if(str[i] != ' '){
+            last_char_pos = i;
+            break;
+        }
+    }
+
+    int num_spaces = 0;
+    for(int i=0; i<=last_char_pos; i++)
+        if(str[i] == ' ') num_spaces++;
+
+    if(true_length != (last_char_pos +1) + (2*num_spaces)) return null;
+
+    int curr = true_length - 1;
+
+    while(last_char_pos >=0){
+        if(str[last_char_pos] == ' '){
+            str[curr] = '0';
+            str[curr-1] = '2';
+            str[curr-2] = '%';
+            curr-=3;
+            last_char_pos--;
+        }
+        else{
+            str[curr] = str[last_char_pos];
+            curr--;
+            last_char_pos--;
+        }
+    }
+
+
+    return str;
 }
 
 
