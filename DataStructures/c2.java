@@ -23,6 +23,7 @@ public class c2{
         SOP("q1\tQuestion 1");
         SOP("q2\tQuestion 2");
         SOP("q3\tQuestion 3");
+        SOP("q4\tQuestion 4");
         SOP("===============================");
         SOP("");
 
@@ -35,6 +36,7 @@ public class c2{
         if(function.equals("q1")) q1(args);
         else if(function.equals("q2")) q2(args);
         else if(function.equals("q3")) q3(args);
+        else if(function.equals("q4")) q4(args);
         else SOP("ERROR: Unknown function");
     }
 
@@ -102,6 +104,25 @@ public class c2{
         SOP("\nRemoved " + nodeToRemove);
         sHead = removeNodeFromMiddleOfList(sHead, nodeToRemove);
         sHead.printList(sHead);
+    }
+
+    public static void q4(String[] args) throws Exception{
+        //Question 2.4: Write code to partition a linked list around a value x, such that all nodes less than
+        //x come before all nodes greater than or eaual to x
+        SOP("Running q3");
+        sNode sHead = generateSinglyLinkedList(args);
+        if(sHead == null) return;
+
+        Scanner s = new Scanner(System.in);
+        System.out.print("Enter node to partition around: ");
+        int partitionNode = s.nextInt();
+
+        sHead = partitionListAroundNode(sHead, partitionNode);
+        if(sHead == null) SOP("Partition Node \"" + partitionNode + "\" not found");
+        else{
+            SOP("After paritioning: ");
+            sHead.printList(sHead);
+        }
     }
 
     public static sNode removeDuplicates(sNode head){
@@ -187,9 +208,48 @@ public class c2{
         return sHead;
     }
 
+    public static sNode partitionListAroundNode(sNode head, int partitionNode){
+        //To solve this, we will use two linked lists, one to store all those that are less than
+        //and the other to store all that are greater
+        
+        //sList1 will be all values less than
+        sNode sList1 = new sNode(-1); //dummy node for head
+        sNode sList1Tail = sList1;
+
+        //sList2 will be all values greater than or equal to
+        sNode sList2 = new sNode(-1); //dummy node for head
+        sNode sList2Tail = sList2;
+
+
+        sNode curr = head;
+        sNode nodeToPartitionAround = null;
+        while(curr != null){
+            if(curr.data < partitionNode){
+                sList1Tail = sListAdd(sList1Tail, curr.data);
+            }
+            else if(curr.data > partitionNode){
+                sList2Tail = sListAdd(sList2Tail, curr.data);
+            }
+            else{
+                nodeToPartitionAround = curr;
+            }
+            curr = curr.next;
+        }
+
+        if(nodeToPartitionAround == null) return null; //meaning not found
+
+        sList1Tail.next = nodeToPartitionAround;
+        nodeToPartitionAround.next = sList2.next; //we skip the dummy node
+
+        return sList1.next; //we skip the dummy node
+    }
 
 
     //==========UTILITY FUNCTIONS
+    public static sNode sListAdd(sNode tail, int d){
+        tail.next = new sNode(d);
+        return tail.next;
+    }
     public static void SOP(String arg){
         System.out.println(arg);
     }
