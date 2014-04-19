@@ -25,6 +25,7 @@ public class c1{
         SOP("q3\tQuestion 3");
         SOP("q4\tQuestion 4");
         SOP("q5\tQuestion 5");
+        SOP("q8\tQuestion 8");
         SOP("===============================");
         SOP("");
 
@@ -39,6 +40,7 @@ public class c1{
         else if(function.equals("q3")) q3(args);
         else if(function.equals("q4")) q4(args);
         else if(function.equals("q5")) q5(args);
+        else if(function.equals("q8")) q8(args);
         else SOP("ERROR: Unknown function");
     }
 
@@ -130,6 +132,23 @@ public static void q5(String[] args){
         SOP("String \"" + args[1] + "\" cannot be compressed");
     else
         SOP("String \"" + args[1] + "\" compressed is \"" + compressed + "\"");
+}
+
+public static void q8(String[] args){
+    //Question 1.8: Assume you have a method isSubstring which checks if one word is a 
+    //substring of another. Given two strings, s1 and s2, write code to check if s2 is
+    //a rotation of s1 using only one call to isSubstring (e.g., "waterbottle" is a rotation
+    //of "erbottlewat")
+    SOP("Running q8");
+    if(args.length != 3){
+        SOP("ERROR: Must specify two strings");
+        return;
+    }
+
+    boolean retVal = isRotation(args[1], args[2]);
+    if(retVal == false) SOP("String \"" + args[1] + "\" is NOT a rotation of \"" + args[2] + "\"");
+    else SOP("String \"" + args[1] + "\" IS a rotation of \"" + args[2] + "\"");
+
 }
 
 
@@ -292,6 +311,14 @@ public static String compressString(String str){
 }
 
 
+public static boolean isRotation(String str1, String str2){
+    if(str1.length() != str2.length()) return false;
+
+    return isSubstring(str1+str1, str2);
+}
+
+
+
 
 
 //==========UTILITY FUNCTIONS
@@ -321,6 +348,10 @@ public static String compressString(String str){
 
     public static void SOP(boolean arg){
         System.out.println(arg);
+    }
+
+    public static boolean isSubstring(String s1, String s2){
+        return s1.contains(s2);
     }
 //==========
 }
