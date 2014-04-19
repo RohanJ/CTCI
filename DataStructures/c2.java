@@ -22,6 +22,7 @@ public class c2{
         SOP("Possible functions:");
         SOP("q1\tQuestion 1");
         SOP("q2\tQuestion 2");
+        SOP("q3\tQuestion 3");
         SOP("===============================");
         SOP("");
 
@@ -33,6 +34,7 @@ public class c2{
         String function = args[0];
         if(function.equals("q1")) q1(args);
         else if(function.equals("q2")) q2(args);
+        else if(function.equals("q3")) q3(args);
         else SOP("ERROR: Unknown function");
     }
 
@@ -78,6 +80,28 @@ public class c2{
         sNode retNode = findKthToLastElement(sHead, k);
         if(retNode == null) SOP("k value of \"" + k + "\" is invalid");
         else SOP("The kth to last element is " + retNode.data);
+    }
+
+    public static void q3(String[] args) throws Exception{
+        //Question 2.3: Implement an algorithm to delete a node in the middle of a singly linked list,
+        //given only access to that node. For example, input: the node 3 from the linked list
+        //1->2->3->4->5
+        //Result, nothing is returned, but the new linked list looks like 1->2->4->5
+        SOP("Running q3");
+        sNode sHead = generateSinglyLinkedList(args);
+        if(sHead == null) return;
+
+        SOP("WARNING: This method assumes that the node you want to delete is in the middle of the list.");
+        SOP("Therefore, for sake of example, there is no error checking involved if the node is not in the middle");
+
+        Scanner s = new Scanner(System.in);
+        System.out.print("Enter node to remove: ");
+        int nodeToRemove = s.nextInt();
+
+
+        SOP("\nRemoved " + nodeToRemove);
+        sHead = removeNodeFromMiddleOfList(sHead, nodeToRemove);
+        sHead.printList(sHead);
     }
 
     public static sNode removeDuplicates(sNode head){
@@ -142,6 +166,24 @@ public class c2{
         }
 
         return null;
+    }
+
+    public static sNode removeNodeFromMiddleOfList(sNode sHead, int d){
+        //The trick here is for the node we want to delete to assume the value and next pointer
+        //of the next node. 
+        //Assumptions: we are told that the value will be somewhere in the middle of the list. Therefore,
+        //we dont have to worry about the beginning or the end of the list, meaning we are guaranteed
+        //that the next node available
+
+        sNode curr = sHead;
+        while(curr != null){
+            if(curr.data == d){
+                curr.data = curr.next.data;
+                curr.next = curr.next.next;
+            }
+            curr = curr.next;
+        }
+        return sHead;
     }
 
 
