@@ -174,6 +174,7 @@ public class c2{
         //Assumptions: we are told that the value will be somewhere in the middle of the list. Therefore,
         //we dont have to worry about the beginning or the end of the list, meaning we are guaranteed
         //that the next node available
+        //We can possibly circumvent this by adding a dummy node in the end
 
         sNode curr = sHead;
         while(curr != null){
