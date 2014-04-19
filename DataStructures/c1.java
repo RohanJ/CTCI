@@ -24,6 +24,7 @@ public class c1{
         SOP("q2\tQuestion 2");
         SOP("q3\tQuestion 3");
         SOP("q4\tQuestion 4");
+        SOP("q5\tQuestion 5");
         SOP("===============================");
         SOP("");
 
@@ -37,6 +38,7 @@ public class c1{
         else if(function.equals("q2")) q2(args);
         else if(function.equals("q3")) q3(args);
         else if(function.equals("q4")) q4(args);
+        else if(function.equals("q5")) q5(args);
         else SOP("ERROR: Unknown function");
     }
 
@@ -110,6 +112,24 @@ public static void q4(String[] args){
     System.out.print("String: \"" + args[1] + "\" replaced is \"");
     System.out.print(str);
     SOP("\"");
+}
+
+public static void q5(String[] args){
+    //Question 1.5: Implement a method to perform basic string compression using the counts
+    //of repeated characters. For example, the strign aabcccccaaa would become a2b2c5a3. 
+    //If the "compressed" string would not become smaller than the original string, your method
+    //should return the original string
+    SOP("Running q5");
+    if(args.length != 2){
+        SOP("ERROR: Must specify string");
+        return;
+    }
+
+    String compressed = compressString(args[1]); 
+    if(args[1].equals(compressed))
+        SOP("String \"" + args[1] + "\" cannot be compressed");
+    else
+        SOP("String \"" + args[1] + "\" compressed is \"" + compressed + "\"");
 }
 
 
@@ -247,6 +267,28 @@ public static char[] replaceSpacesInStr(char[] str, int true_length){
 
 
     return str;
+}
+
+public static String compressString(String str){
+    StringBuilder mSB = new StringBuilder();
+    int length = str.length();
+    char letter = str.charAt(0);
+    int count = 1;   
+    str+=" ";
+
+   for(int i = 1; i<str.length(); i++){
+        if(str.charAt(i) == letter) count++;
+        else{
+            String toAppend = letter + "" + count;
+            mSB.append(toAppend);
+            letter = str.charAt(i);
+            count = 1;
+        }
+   }
+
+   String mSB_str = mSB.toString();
+   if(mSB_str.length() >= str.length()) return str.substring(0, str.length()-1);
+   else return mSB_str;
 }
 
 
