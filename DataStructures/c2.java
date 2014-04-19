@@ -21,6 +21,7 @@ public class c2{
         SOP("");
         SOP("Possible functions:");
         SOP("q1\tQuestion 1");
+        SOP("q2\tQuestion 2");
         SOP("===============================");
         SOP("");
 
@@ -31,17 +32,14 @@ public class c2{
 
         String function = args[0];
         if(function.equals("q1")) q1(args);
+        else if(function.equals("q2")) q2(args);
         else SOP("ERROR: Unknown function");
     }
 
-    public static void q1(String[] args) throws Exception{
-        //Question 2.1: Write a code to remove duplicates from an unsorted linked list. How would 
-        //you solve this problem if a temporary buffer is not allowed?
-        
-        SOP("Running q1");
+    public static sNode generateSinglyLinkedList(String[] args){
         if(args.length < 3){
             SOP("ERROR: Must specify at least two nodes");
-            return;
+            return null;
         }
 
         //generate singly linked list from args
@@ -51,10 +49,35 @@ public class c2{
         }
 
         sHead.printList(sHead);
+        return sHead;
+    }
+
+    public static void q1(String[] args) throws Exception{
+        //Question 2.1: Write a code to remove duplicates from an unsorted linked list. How would 
+        //you solve this problem if a temporary buffer is not allowed?
+        
+        SOP("Running q1");
+        sNode sHead = generateSinglyLinkedList(args);
+        if(sHead == null) return;
 
         sHead = removeDuplicates(sHead);
         SOP("After Remove Duplicates: ");
         sHead.printList(sHead);
+    }
+
+    public static void q2(String[] args) throws Exception{
+        //Question 2.2: Implement an algorithm to find the kth to last element of a singly linked list
+        SOP("Running q2");
+        sNode sHead = generateSinglyLinkedList(args);
+        if(sHead == null) return;
+        
+        Scanner s = new Scanner(System.in);
+        System.out.print("Enter k value: ");
+        int k = s.nextInt();
+
+        sNode retNode = findKthToLastElement(sHead, k);
+        if(retNode == null) SOP("k value of \"" + k + "\" is invalid");
+        else SOP("The kth to last element is " + retNode.data);
     }
 
     public static sNode removeDuplicates(sNode head){
@@ -88,6 +111,37 @@ public class c2{
         }
 
         return head;
+    }
+
+    public static sNode findKthToLastElement(sNode sHead, int k){
+        //This can be done in O(n) run time but can vary in space complexity depending on
+        //whether you use external data strucutres.
+        //If you use an external data structure, such as a hash map where the value is the node
+        //position and node value, we only need to iterate through the linked list once but
+        //there is aO(n) space complexity as well. If we want O(1) space complexity, we simply 
+        //iterate through the linked list twice. The first time to figure out the length, the second
+        //time to get the kth to last position. This is still O(n) run time.
+
+        //Here we assume kth is 0-based. Meaning if k is 0, we would return the last element.
+        sNode curr = sHead;
+        int  numElements = 0;
+        while(curr != null){
+            numElements++;
+            curr = curr.next;
+        }
+
+        if(k >= numElements) return null;
+        int elementWeWant = numElements - k;
+
+        curr = sHead;
+        numElements = 0;
+        while(curr != null){
+            numElements++;
+            if(numElements == elementWeWant) return curr;
+            curr = curr.next;
+        }
+
+        return null;
     }
 
 
