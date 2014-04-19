@@ -24,6 +24,7 @@ public class c2{
         SOP("q2\tQuestion 2");
         SOP("q3\tQuestion 3");
         SOP("q4\tQuestion 4");
+        SOP("q5\tQuestion 5");
         SOP("===============================");
         SOP("");
 
@@ -37,6 +38,7 @@ public class c2{
         else if(function.equals("q2")) q2(args);
         else if(function.equals("q3")) q3(args);
         else if(function.equals("q4")) q4(args);
+        else if(function.equals("q5")) q5(args);
         else SOP("ERROR: Unknown function");
     }
 
@@ -109,7 +111,7 @@ public class c2{
     public static void q4(String[] args) throws Exception{
         //Question 2.4: Write code to partition a linked list around a value x, such that all nodes less than
         //x come before all nodes greater than or eaual to x
-        SOP("Running q3");
+        SOP("Running q4");
         sNode sHead = generateSinglyLinkedList(args);
         if(sHead == null) return;
 
@@ -124,6 +126,42 @@ public class c2{
             sHead.printList(sHead);
         }
     }
+
+    public static void q5(String[] args) throws Exception{
+        //Question 2.5: You have two numbers represented by a linked list, where each node contains a
+        //single digit. The digits are stored in reverse order, such that the 1's digit is at the head of the list.
+        //Write a function that adds the two numbers and returns the sum as a linked list
+        //Example
+        //Input: (7 -> 1 -> 6 ) + (5 -> 9 -> 2). That is, 617 + 295.
+        //Output: 2 -> 1 -> 9. That is, 912
+
+        //This runs O(n) time
+        SOP("Running q5");
+        if(args.length != 1){
+            SOP("ERROR: This function does not take any arguments");
+            return;
+        }
+        Scanner s = new Scanner(System.in);
+        SOP("Enter two numbers to add:");
+        System.out.print("Number 1: ");
+        int num1 = s.nextInt();
+        System.out.print("Number 2: ");
+        int num2 = s.nextInt();
+
+        SOP("Generating reversed linked lists...");
+        sNode sList1 = createReversedListFromNumber(num1);
+        sNode sList2 = createReversedListFromNumber(num2);
+        sList1.printList(sList1);
+        sList2.printList(sList2);
+
+        sNode result = addNumbers(sList1, sList2);
+        if(result == null) SOP("ERROR. Invalid lists");
+        else{
+            SOP("The result is: ");
+            result.printList(result);
+        } 
+
+     }
 
     public static sNode removeDuplicates(sNode head){
         //If a temporary buffer / external data structure were allowed, then we could solve this
@@ -244,12 +282,59 @@ public class c2{
         return sList1.next; //we skip the dummy node
     }
 
+    public static sNode addNumbers(sNode sList1, sNode sList2){
+        if(sList1==null || sList2==null) return null;
+        int carry_over = 0;
+        sNode head = new sNode(-1); //dummy node
+        sNode tail = head;
+
+        int iSum = 0;
+        int onesDigit = 0;
+        while(sList1 != null && sList2 != null){
+            iSum = sList1.data + sList2.data + carry_over;
+            //next we isolate ones digit
+            onesDigit = iSum%10;
+            SOP("iSum: " + iSum + "; onesDigit: " + onesDigit);
+            tail = sListAdd(tail, onesDigit);
+            carry_over = (iSum >= 10) ? 1 : 0;
+            sList1 = sList1.next;
+            sList2 = sList2.next;
+        }
+
+        if(sList1 != null || sList2 != null){ 
+            sNode theRest = (sList1 == null) ? sList2 : sList1;
+            while(theRest != null){
+                iSum = theRest.data + 0 + carry_over;
+                onesDigit = iSum%10;
+                tail = sListAdd(tail, onesDigit);
+                carry_over = (iSum >= 10) ? 1 : 0;
+                theRest = theRest.next;
+            }
+        }
+
+         if(carry_over == 1){
+                tail = sListAdd(tail, carry_over);
+         }
+         return head.next; //skip over dummy node and return
+    }
+
 
     //==========UTILITY FUNCTIONS
     public static sNode sListAdd(sNode tail, int d){
         tail.next = new sNode(d);
         return tail.next;
     }
+
+    public static sNode createReversedListFromNumber(int num){
+        String str = Integer.toString(num);
+        sNode head = new sNode(-1); //dummyNode
+        sNode tail = head;
+        for(int i = str.length() -1; i >=0; i--){
+            tail = sListAdd(tail, Character.getNumericValue(str.charAt(i)));
+        }
+        return head.next; //skip over dummy node
+    }
+
     public static void SOP(String arg){
         System.out.println(arg);
     }
