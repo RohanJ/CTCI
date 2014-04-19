@@ -25,6 +25,7 @@ public class c2{
         SOP("q3\tQuestion 3");
         SOP("q4\tQuestion 4");
         SOP("q5\tQuestion 5");
+        SOP("q7\tQuestion 7");
         SOP("===============================");
         SOP("");
 
@@ -39,6 +40,7 @@ public class c2{
         else if(function.equals("q3")) q3(args);
         else if(function.equals("q4")) q4(args);
         else if(function.equals("q5")) q5(args);
+        else if(function.equals("q7")) q7(args);
         else SOP("ERROR: Unknown function");
     }
 
@@ -160,6 +162,17 @@ public class c2{
             SOP("The result is: ");
             result.printList(result);
         } 
+     }
+
+     public static void q7(String[] args) throws Exception{
+        //Question 2.7: Implement a function to check if a linked list is a palindrome
+        SOP("Running q7");
+        sNode sHead = generateSinglyLinkedList(args);
+        if(sHead == null) return;
+
+        
+        if(isListAPalindrome(sHead) == true) SOP("The above list IS a palindrome");
+        else SOP("The above list is NOT a palindrome");
 
      }
 
@@ -342,6 +355,41 @@ public class c2{
         return fast;
     }
 
+    public static boolean isListAPalindrome(sNode head){
+        //If were using doubly linked lists we would first figure out the length then accordingly from the middle
+        //expand to both ends and compare values. This will be done O(n)
+
+        //However given that this we only have a singly linked list, we would find the middle, reverse the second half
+        //and then compare linearly. Again this is O(n) time.
+        int length = 0;
+        sNode curr = head;
+        while(curr != null){
+            length++;
+            curr = curr.next;
+        }
+        
+        //travel to the middle node
+        curr = head;
+        for(int i = 1; i<=length/2; i++){
+            curr = curr.next;
+        }
+
+        sNode sHalf = null;
+        if(length % 2 == 0)
+            sHalf = reverseList(curr);
+        else
+            sHalf = reverseList(curr.next);
+        
+        //next we compare the halves
+        for(int i =0; i<length/2; i++){
+            if(head == null) break;
+            if(head.data != sHalf.data) return false;
+            head = head.next;
+            sHalf = sHalf.next;
+        }
+        return true;
+    }
+
 
     //==========UTILITY FUNCTIONS
     public static sNode sListAdd(sNode tail, int d){
@@ -357,6 +405,24 @@ public class c2{
             tail = sListAdd(tail, Character.getNumericValue(str.charAt(i)));
         }
         return head.next; //skip over dummy node
+    }
+
+    public static sNode reverseList(sNode head){
+        //runs in O(n) time
+        if(head.next == null) return head;
+        sNode prev = null;
+        sNode curr = head;
+        sNode next = head.next;
+        int count = 0;
+        while(next != null){
+            curr.next = prev;
+            prev = curr;
+            sNode temp = next.next;
+            next.next = curr;
+            curr = next;
+            next = temp;
+        }
+        return curr;
     }
 
     public static void SOP(String arg){
