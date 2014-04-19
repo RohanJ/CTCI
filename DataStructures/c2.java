@@ -318,6 +318,30 @@ public class c2{
          return head.next; //skip over dummy node and return
     }
 
+    public static sNode findLoopStart(sNode head){
+        //Implement the fast/slow runner method. If loop exists, guaratneed to overlap
+        sNode fast = head;
+        sNode slow = head;
+
+        while(fast != null && fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+            if(fast == slow) break; //we know there is a loop because of collision, but not necessairly where
+        }
+
+        //reach here indicating either there was a collision or fast pointer simply reached the end with no loop
+        if(fast == null || fast.next == null) return null; //indicating no loop
+
+        //Now we must find where the loop beginning is
+        slow = head;
+        while(slow != fast){
+            slow = slow.next;
+            fast = fast.next;
+        }
+
+        return fast;
+    }
+
 
     //==========UTILITY FUNCTIONS
     public static sNode sListAdd(sNode tail, int d){
