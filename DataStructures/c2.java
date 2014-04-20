@@ -15,7 +15,7 @@ import java.lang.StringBuilder;
 
 public class c2{
     public static void main(String[] args) throws Exception{
-        SOP("==========Chapter 1 Arrays and Strings===");
+        SOP("==========Chapter 2 Linked Lists===");
         SOP("To run: java c2 [function name] [function arguments (i.e. node values in linked list)]");
         SOP("Example: java c2 q1 1 2 3 4");
         SOP("");
