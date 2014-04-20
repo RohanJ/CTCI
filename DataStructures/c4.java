@@ -22,6 +22,7 @@ public class c4{
         SOP("Possible functions:");
         SOP("q1\tQuestion 1");
         SOP("q2\tQuestion 2");
+        SOP("q3\tQuestion 3");
         SOP("===============================");
         SOP("");
 
@@ -33,6 +34,7 @@ public class c4{
         String function = args[0];
         if(function.equals("q1")) q1(args);
         else if(function.equals("q2")) q2(args);
+        else if(function.equals("q3")) q3(args);
         else SOP("ERROR: Unknown function");
     } 
 
@@ -115,6 +117,40 @@ public class c4{
 
     }  
 
+    public static void q3(String[] args) throws Exception{
+        //Given a sorted (increasing order) array with unique integer elements, write an algorithm 
+        //to create a binary search tree with minimal height
+        SOP("Running q3");
+        if(args.length < 2){
+            SOP("ERROR: Must specify list of nodes");
+            return;
+        }
+
+        ArrayList<Integer> mList = new ArrayList<Integer>();
+        for(int i = 1; i < args.length; i++){
+            mList.add(Integer.parseInt(args[i]));
+        }
+
+        //make sure the list is sorted
+        if(isListSorted(mList) == false)
+            Collections.sort(mList);
+
+        bNode root = buildMinimalBST(mList, 0, mList.size() -1);
+        SOP("Minimal BST Created. Now printing inOrderTraversal");
+        printInOrderTraversal(root);
+
+    }
+
+    public static bNode buildMinimalBST(ArrayList<Integer> mList, int start, int end){
+        if(start > end) return null;
+
+        int mid = (end+start)/2;
+        bNode root = new bNode(mList.get(mid));
+        root.left = buildMinimalBST(mList, start, mid -1);
+        root.right = buildMinimalBST(mList, mid +1, end);
+        return root;
+    }
+
     public static boolean isBalanced(bNode root){
         if(getHeight(root) == -1) return false;
         else return true;
@@ -134,6 +170,35 @@ public class c4{
     }
 
     //==========UTILITY FUNCTIONS
+    public static void printPreOrderTraversal(bNode root){
+        if(root == null) return;
+        SOP(root.data);
+        printPreOrderTraversal(root.left);
+        printPreOrderTraversal(root.right);
+    }
+
+    public static void printInOrderTraversal(bNode root){
+        if(root == null) return;
+        printPreOrderTraversal(root.left);
+        SOP(root.data);
+        printPreOrderTraversal(root.right);
+    }
+
+    public static void printPostOrderTraversal(bNode root){
+        if(root == null) return;
+        printPreOrderTraversal(root.left);
+        printPreOrderTraversal(root.right);
+        SOP(root.data);
+    }
+
+    public static boolean isListSorted(ArrayList<Integer> mList){
+        int temp = mList.get(0);
+        for(int i = 1; i < mList.size(); i++){
+            if(mList.get(i) < temp) return false;
+            temp = mList.get(i);
+        }
+        return true;
+    }
     // Sample Binary Trees
     public static bNode generateSampleTree1(){
         /*
