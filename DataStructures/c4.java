@@ -23,6 +23,7 @@ public class c4{
         SOP("q1\tQuestion 1");
         SOP("q2\tQuestion 2");
         SOP("q3\tQuestion 3");
+        SOP("q4\tQuestion 4");
         SOP("===============================");
         SOP("");
 
@@ -35,6 +36,7 @@ public class c4{
         if(function.equals("q1")) q1(args);
         else if(function.equals("q2")) q2(args);
         else if(function.equals("q3")) q3(args);
+        else if(function.equals("q4")) q4(args);
         else SOP("ERROR: Unknown function");
     } 
 
@@ -118,7 +120,7 @@ public class c4{
     }  
 
     public static void q3(String[] args) throws Exception{
-        //Given a sorted (increasing order) array with unique integer elements, write an algorithm 
+        //Question 4.3: Given a sorted (increasing order) array with unique integer elements, write an algorithm 
         //to create a binary search tree with minimal height
         SOP("Running q3");
         if(args.length < 2){
@@ -138,6 +140,52 @@ public class c4{
         bNode root = buildMinimalBST(mList, 0, mList.size() -1);
         SOP("Minimal BST Created. Now printing inOrderTraversal");
         printInOrderTraversal(root);
+    }
+
+    public static void q4(String[] args) throws Exception{
+        //Question 4.4: Given a binary tree, design an algorithm which creates a linked list of all the nodes at
+        //each depth(e.g., if you have a tree with depth D, you'll have D linked lists).
+        SOP("Running q4");
+        if(args.length != 1){
+            SOP("This question takes no parameters");
+            return;
+        }
+
+        bNode root = generateSampleTree1();
+        ArrayList<LinkedList<bNode>> mList = generateLinkedListPerDepth(root);
+        int level = 0;
+        for(LinkedList<bNode> mLL : mList){
+            SOP("Level " + level +": ");
+            level++;
+            for(bNode n : mLL){
+                System.out.print(n.data + " ");
+            }
+            SOP("");
+        }
+
+    }
+
+    public static ArrayList<LinkedList<bNode>> generateLinkedListPerDepth(bNode root){
+        ArrayList<LinkedList<bNode>> mList = new ArrayList<LinkedList<bNode>>();
+        gLLPD_helper(root, mList, 0);
+        return mList;
+    }
+
+    public static void gLLPD_helper(bNode root, ArrayList<LinkedList<bNode>> mList, int level){
+        if(root == null) return;
+
+        LinkedList<bNode> tList = null;
+        if(mList.size() == level){
+            tList = new LinkedList<bNode>();
+            mList.add(tList);
+        }
+        else{
+            tList = mList.get(level);
+        }
+
+        tList.add(root);
+        gLLPD_helper(root.left, mList, level +1);
+        gLLPD_helper(root.right, mList, level +1);
 
     }
 
