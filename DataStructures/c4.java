@@ -24,6 +24,7 @@ public class c4{
         SOP("q2\tQuestion 2");
         SOP("q3\tQuestion 3");
         SOP("q4\tQuestion 4");
+        SOP("q5\tQuestion 5");
         SOP("===============================");
         SOP("");
 
@@ -37,6 +38,7 @@ public class c4{
         else if(function.equals("q2")) q2(args);
         else if(function.equals("q3")) q3(args);
         else if(function.equals("q4")) q4(args);
+        else if(function.equals("q5")) q5(args);
         else SOP("ERROR: Unknown function");
     } 
 
@@ -163,6 +165,43 @@ public class c4{
             SOP("");
         }
 
+    }
+
+    public static void q5(String[] args) throws Exception{
+        //Question 4.5: Implement a function to check if a binary tree is a binary search tree
+
+        //Recall that binary search tree enforces that the left of each node is <= and the right is >
+        SOP("Running q5");
+        if(args.length != 1){
+            SOP("This question takes no parameters");
+            return;
+        }
+
+        bNode defNotABST = generateSampleTree1();
+
+        ArrayList<Integer> mList = new ArrayList<Integer>();
+        for(int i = 0; i < 16; i++){
+            mList.add(i);
+        }
+        bNode isABST = buildMinimalBST(mList, 0, mList.size() -1);
+
+        if(isBinaryTreeABinarySearchTree(defNotABST) == true) SOP("Tree 1 IS a Binary Search Tree. Function does not work.");
+        else SOP("Tree 1 is NOT a Binary Search Tree. Function works!");
+
+        if(isBinaryTreeABinarySearchTree(isABST) == true) SOP("Tree 2 IS a Binary Search Tree. Function works!");
+        else SOP("Tree 2 is NOT a Binary Search Tree. Function does not work.");
+    }
+
+    public static boolean isBinaryTreeABinarySearchTree(bNode root){
+        if(root == null) return true;
+        if(root.left != null){
+            if(root.left.data > root.data) return false;
+        }
+        if(root.right != null){
+            if(root.right.data <= root.data) return false;
+        }
+
+        return isBinaryTreeABinarySearchTree(root.left) && isBinaryTreeABinarySearchTree(root.right);
     }
 
     public static ArrayList<LinkedList<bNode>> generateLinkedListPerDepth(bNode root){
@@ -311,6 +350,7 @@ public class c4{
         root.left.left.left = new bNode(8);
         return root;
     }
+
     public static void SOP(String arg){
         System.out.println(arg);
     }
