@@ -26,6 +26,7 @@ public class c4{
         SOP("q4\tQuestion 4");
         SOP("q5\tQuestion 5");
         SOP("q6\tQuestion 6");
+        SOP("q7\tQuestion 7");
         SOP("===============================");
         SOP("");
 
@@ -41,6 +42,7 @@ public class c4{
         else if(function.equals("q4")) q4(args);
         else if(function.equals("q5")) q5(args);
         else if(function.equals("q6")) q6(args);
+        else if(function.equals("q7")) q7(args);
         else SOP("ERROR: Unknown function");
     } 
 
@@ -218,6 +220,66 @@ public class c4{
                 else SOP("Function INCORRECT");
             }
         }
+    }
+
+    public static void q7(String[] args) throws Exception{
+        //Question 4.7: Design an algorithm and write code to find the first common ancestor of two nodes
+        //in a binary tree. Avoid storing addidiotnal nodes in a data structure. NOTE: This not necessairly a
+        //binary search tree
+        SOP("Running q7");
+        if(args.length != 1){
+            SOP("The question takes no parameters");
+            return;
+        }
+
+        bNode root = generateSampleTree1();
+        //4 and 5 should return 2
+        //4 and 7 should return 1
+        //5 and 6 should return 1
+        //1 and 5 should return 1
+        //1 and 7 should return 1
+
+        bNode retVal1 = findFirstCommonAncestor(root, 4, 5);
+        bNode retVal2 = findFirstCommonAncestor(root, 4, 7);
+        bNode retVal3 = findFirstCommonAncestor(root, 5, 6);
+        bNode retVal4 = findFirstCommonAncestor(root, 1, 5);
+        bNode retVal5 = findFirstCommonAncestor(root, 1, 7);
+
+         
+        testResult(retVal1.data, 2, "Test 1");
+        testResult(retVal2.data, 1, "Test 2");
+        testResult(retVal3.data, 1, "Test 3");
+        testResult(retVal4.data, 1, "Test 4");
+        testResult(retVal5.data, 1, "Test 5");
+    }
+
+
+    public static bNode findFirstCommonAncestor(bNode root, int node1, int node2){
+        return findFirstCommonAncestor(root, new bNode(node1), new bNode(node2));
+    }
+
+    public static bNode findFirstCommonAncestor(bNode root, bNode node1, bNode node2){
+        if(root == null || node1 == null || node2 == null) return null;
+        //Note that we cannot assume if the nodes have links to their parent. If they do, then we can simply start at
+        //each node and traverse up marking the nodes as visited and see where they converge.
+
+        //Given the case where the nodes do not have links to their parents
+        if(root.data == node1.data || root .data == node2.data) return root;
+        boolean isNode1OnLeft = isNodeOnSide(root.left, node1);
+        boolean isNode2OnLeft = isNodeOnSide(root.left, node2);
+
+        if(isNode1OnLeft != isNode2OnLeft) return root; //meaning we have found the divergent point
+
+        //reach here indicating that they are on the same side. So if the boolean above was true, they
+        //are both on the left side.
+        if(isNode1OnLeft) return findFirstCommonAncestor(root.left, node1, node2);
+        else return findFirstCommonAncestor(root.right, node1, node2);
+    }
+
+    public static boolean isNodeOnSide(bNode root, bNode tNode){
+        if(root == null) return false;
+        if(root.data == tNode.data) return true;
+        return isNodeOnSide(root.left, tNode) || isNodeOnSide(root.right, tNode);
     }
 
     public static bNode findNextInOrderSucessor(bNode root, int origin){
@@ -451,6 +513,14 @@ public class c4{
         if(root.data == d) return root;
         if(d<=root.data) return binarySearch(root.left, d);
         else return binarySearch(root.right, d);
+    }
+
+    public static void testResult(int result, int whatItShouldBe, String testName){
+        if(result == whatItShouldBe) SOP(testName + " PASSED");
+        else{ 
+            SOP(testName + " FAILED"); 
+            SOP("Result was: " + result +"; whatItShouldBe: " + whatItShouldBe);
+        }
     }
 
     public static void SOP(String arg){
