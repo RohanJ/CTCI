@@ -25,6 +25,7 @@ public class c4{
         SOP("q3\tQuestion 3");
         SOP("q4\tQuestion 4");
         SOP("q5\tQuestion 5");
+        SOP("q6\tQuestion 6");
         SOP("===============================");
         SOP("");
 
@@ -39,6 +40,7 @@ public class c4{
         else if(function.equals("q3")) q3(args);
         else if(function.equals("q4")) q4(args);
         else if(function.equals("q5")) q5(args);
+        else if(function.equals("q6")) q6(args);
         else SOP("ERROR: Unknown function");
     } 
 
@@ -190,6 +192,58 @@ public class c4{
 
         if(isBinaryTreeABinarySearchTree(isABST) == true) SOP("Tree 2 IS a Binary Search Tree. Function works!");
         else SOP("Tree 2 is NOT a Binary Search Tree. Function does not work.");
+    }
+
+    public static void q6(String[] args) throws Exception{
+        //Question 4.6: Write an algorithm to find the 'next' node (i.e., in order successor) of a given node in
+        //a binary search tree. You may assume that each node has a link to its parent.
+        SOP("Running q6");
+        if(args.length != 1){
+            SOP("This question takes no parameters");
+            return;
+        }
+
+        bNode mBinarySearchTree = generateSampleBinarySearchTree1();
+
+        for(int i = 1; i<=7; i++){
+            bNode result = findNextInOrderSucessor(mBinarySearchTree, i);
+            if(result != null){
+                SOP("The next node for ["+i+"] is [" + result.data +"]");
+                if(result.data == (i+1) ) SOP("Function CORRECT");
+                else SOP("Function INCORRECT");
+            }
+            else{
+                SOP("The next node for ["+i+"] is null");
+                if(i==7) SOP("Function CORRECT");
+                else SOP("Function INCORRECT");
+            }
+        }
+    }
+
+    public static bNode findNextInOrderSucessor(bNode root, int origin){
+        //Due to the properties of a BST (left child is <= and right child is >), we can use the following algorithm:
+        //If right subtree exists, find the left most leaf in right subtree
+        //else backtrack upwards until you find a node such that the node is the left
+        //child of its parent
+
+        if(root == null) return null;
+        
+        bNode start = binarySearch(root, origin);
+        if(start == null) return null; //meaning not found
+
+        if(start.right != null) return findLeftMostChild(start.right);
+        else{
+            //backtrack up until we find a node who is the left child of its parent
+            if(start.parent == null) return null; //meaning there is no next in order successor
+            bNode parent = start.parent;
+            bNode curr = start;
+            while(parent.right == curr){
+                curr = parent;
+                parent = curr.parent;
+                if(parent == null) return null;
+            }
+            return parent;
+        }
     }
 
     public static boolean isBinaryTreeABinarySearchTree(bNode root){
@@ -349,6 +403,54 @@ public class c4{
         root.left.left = new bNode(4);
         root.left.left.left = new bNode(8);
         return root;
+    }
+
+    public static bNode generateSampleBinarySearchTree1(){
+        /*
+        *                     4
+        *                   /  \
+        *                 2     6
+        *               /  \   / \
+        *             1    3  5  7
+        */
+
+        //Level 0
+        bNode root = new bNode(4);
+        
+        //Level 1
+        root.left = new bNode(2);
+        root.right = new bNode(6);
+        root.left.parent = root;
+        root.right.parent = root;
+        
+        //Level 2
+        root.left.left = new bNode(1);
+        root.left.right = new bNode(3);
+        root.left.left.parent = root.left;
+        root.left.right.parent = root.left;
+        
+        //Level 3
+        root.right.left = new bNode(5);
+        root.right.right = new bNode(7);
+        root.right.left.parent = root.right;
+        root.right.right.parent = root.right;
+        
+        return root;
+    }
+
+    public static bNode findLeftMostChild(bNode root){
+        while(root.left != null){
+            root = root.left;
+        }
+        return root;
+    }
+
+    public static bNode binarySearch(bNode root, int d){
+        //only works on binary search tree
+        if(root == null) return null;
+        if(root.data == d) return root;
+        if(d<=root.data) return binarySearch(root.left, d);
+        else return binarySearch(root.right, d);
     }
 
     public static void SOP(String arg){
