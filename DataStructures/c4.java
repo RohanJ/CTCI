@@ -4,6 +4,7 @@
 @run: java c4 [function name] [function arguments]
 @project: Data Structures
 @purpose: Chapter 4 Trees and Graphs
+FINISHED
 =========================*/
 
 
