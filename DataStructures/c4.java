@@ -27,6 +27,7 @@ public class c4{
         SOP("q5\tQuestion 5");
         SOP("q6\tQuestion 6");
         SOP("q7\tQuestion 7");
+        SOP("q9\tQuestion 9");
         SOP("===============================");
         SOP("");
 
@@ -43,6 +44,7 @@ public class c4{
         else if(function.equals("q5")) q5(args);
         else if(function.equals("q6")) q6(args);
         else if(function.equals("q7")) q7(args);
+        else if(function.equals("q9")) q9(args);
         else SOP("ERROR: Unknown function");
     } 
 
@@ -253,6 +255,57 @@ public class c4{
         testResult(retVal5.data, 1, "Test 5");
     }
 
+    public static void q9(String[] args) throws Exception{
+        //Question 4.9: You are given a binary tree in which each node contains a value. Design an algorithm
+        //to print all pathswhich sum to a given value. The path does not need to start or end at the root or
+        //a leaf
+        SOP("Running q9");
+        if(args.length != 1){
+            SOP("This question takes no parameters");
+            return;
+        }
+
+        bNode root = generateSampleTreeForPathsWithSumQuestion();
+        printAllPathsWithSum(root, 5);
+    }
+
+    public static void printAllPathsWithSum(bNode root, int sum){
+        //Notice that we cannot make any assumption on whether the numbers are positive or negative
+        //
+        int treeHeight = findTreeHeight(root);
+        int[] path = new int[treeHeight];
+        findPathWithSum(root, sum, path, 0);
+    }
+
+    public static void findPathWithSum(bNode root, int sum, int[] path, int currLevel){
+        if(root == null) return;
+        
+        path[currLevel] = root.data;
+    
+        int currSum = 0;
+        for(int i = currLevel; i>=0; i--){
+            currSum += path[i];
+            if(currSum == sum){
+                printPath(path, i, currLevel);
+            }
+        }
+
+        findPathWithSum(root.left, sum , path, currLevel + 1);
+        findPathWithSum(root.right, sum , path, currLevel + 1);
+    }
+
+    public static int findTreeHeight(bNode root){
+        if(root == null) return 0;
+        else return 1+ Math.max(findTreeHeight(root.left), findTreeHeight(root.right));
+    }
+
+    public static void printPath(int[] path, int start, int end){
+        for(int i = start; i <= end; i++){
+            System.out.print(path[i] + " ");
+        }
+        SOP("");
+    }
+
 
     public static bNode findFirstCommonAncestor(bNode root, int node1, int node2){
         return findFirstCommonAncestor(root, new bNode(node1), new bNode(node2));
@@ -382,15 +435,15 @@ public class c4{
 
     public static void printInOrderTraversal(bNode root){
         if(root == null) return;
-        printPreOrderTraversal(root.left);
+        printInOrderTraversal(root.left);
         SOP(root.data);
-        printPreOrderTraversal(root.right);
+        printInOrderTraversal(root.right);
     }
 
     public static void printPostOrderTraversal(bNode root){
         if(root == null) return;
-        printPreOrderTraversal(root.left);
-        printPreOrderTraversal(root.right);
+        printPostOrderTraversal(root.left);
+        printPostOrderTraversal(root.right);
         SOP(root.data);
     }
 
@@ -497,6 +550,33 @@ public class c4{
         root.right.left.parent = root.right;
         root.right.right.parent = root.right;
         
+        return root;
+    }
+
+     public static bNode generateSampleTreeForPathsWithSumQuestion(){
+        /*
+        *                     1
+        *                   /  \
+        *                 2     3
+        *               /  \   / \
+        *             2   5  6  1
+        *           /            \
+        *         3               -5
+        *           \
+        *            -1
+        */
+
+        bNode root = new bNode(1);
+        root.left = new bNode(2);
+        root.right = new bNode(3);
+        root.left.left = new bNode(2);
+        root.left.right = new bNode(5);
+        root.right.left = new bNode(6);
+        root.right.right = new bNode(1);
+
+        root.left.left.left = new bNode(3);
+        root.left.left.left.right = new bNode(-1);
+        root.right.left.right = new bNode(-5);
         return root;
     }
 
