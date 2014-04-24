@@ -20,6 +20,7 @@ public class c5{
         SOP("");
         SOP("Possible functions:");
         SOP("q1\tQuestion 1");
+        SOP("q2\tQuestion 2");
         SOP("===============================");
         SOP("");
 
@@ -30,6 +31,7 @@ public class c5{
 
         String function = args[0];
         if(function.equals("q1")) q1(args);
+        else if(function.equals("q2")) q2(args);
         else SOP("ERROR: Unknown function");
     }
 
@@ -42,8 +44,7 @@ public class c5{
         //Example
         //Input: N = 10000000000, M = 10011, i = 2, j=6
         //Output: N = 10001001100
-
-        //Integer.toBinaryString(x)
+        SOP("Running q1");
         if(args.length != 5){
             SOP("ERROR: Must specify two integers to represent the two numbers and two integers for the index start and index end");
             return;
@@ -69,12 +70,33 @@ public class c5{
             return;
         }
 
-        SOP("Running q1");
         int result = insertMIntoN(n, m, i, j);
         SOP2("Inserting \"" +n + "->[" + Integer.toBinaryString(n) + "]\"");
         SOP2(" into \""  + m + "->[" + Integer.toBinaryString(m) + "]\"" );
         SOP2(" between indexes [" + i + "," + j +"]");
         SOP(" yields: " +  result + "->[" + Integer.toBinaryString(result) +"]" );
+    }
+
+    public static void q2(String[] args) throws Exception{
+        //Question 5.2: Given a real number between 0 and 1 (e.g. 0.72) that is passed in as a double, print
+        //the binary representation. If the number cannot be represented accurately in binary with at most 32
+        //characters, print "ERROR."
+        SOP("Running q2");
+        if(args.length != 2){
+            SOP("Must specify decimal number");
+            return;
+        }
+
+        Double theNum = Double.parseDouble(args[1]);
+
+        if(theNum <= 0 || theNum >= 1){
+            SOP("Must specify decimal number");
+            return;
+        }
+
+        String retVal = convertDecimalToBinary(theNum);
+        if(retVal.equals("ERROR")) SOP("ERROR");
+        else SOP("\"" + theNum + "\" in binary is " + retVal );
     }
 
     public static int insertMIntoN(int n, int m, int i, int j){
@@ -91,6 +113,26 @@ public class c5{
 
         int maskBasedFromM = (m << i);
         return n | maskBasedFromM;
+    }
+
+    public static String convertDecimalToBinary(double num){
+        StringBuilder mSB = new StringBuilder();
+        mSB.append(".");
+
+        while(num > 0){
+            if(mSB.length() >= 32) break;
+            
+            double temp = num * 2;
+            if(temp>=1){
+                mSB.append("1");
+                num  = temp - 1;
+            }
+            else{
+                mSB.append("0");
+                num = temp;
+            }
+        }
+        return mSB.toString();
     }
 
     //==========UTILITY FUNCTIONS
