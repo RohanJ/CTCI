@@ -155,6 +155,18 @@ public class c5{
         SOP("\""+ num +"\" with even-odd bits swapped is: " + swapEvenOddBits(num));
     }
 
+    public static void q7(String[] args) throws Exception{
+        //Question 5.7: An array A contains all the integers from 0 through n, except for one number which is
+        //missing. In this problem, we cannot access an entire integer in A with a single operation. The elements
+        //of A are represented in binary, and the only operation we can use to access them is "fetch the jth bit of
+        //A[i]," which takes contant time. Write code to find the missing integer. Can you do it in O(n) time?
+        SOP("Runing q7");
+        //similar problem: given numbers 0 through n, one number is removed find the missing number
+        //recall that the sum from 0 to n is (n(n+1))/2. So find the difference, thats the missing number
+
+        
+    }
+
     public static int insertMIntoN(int n, int m, int i, int j){
         //at this point we are guarateed i and j are valid indexes with enough space
         //The ultimate goal is to | the n with mask based off  of M, but we must first 0 
