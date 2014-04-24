@@ -21,6 +21,8 @@ public class c5{
         SOP("Possible functions:");
         SOP("q1\tQuestion 1");
         SOP("q2\tQuestion 2");
+        SOP("q3\tQuestion 3");
+        SOP("q4\tQuestion 4");
         SOP("===============================");
         SOP("");
 
@@ -32,6 +34,8 @@ public class c5{
         String function = args[0];
         if(function.equals("q1")) q1(args);
         else if(function.equals("q2")) q2(args);
+        else if(function.equals("q3")) q3(args);
+        else if(function.equals("q4")) q4(args);
         else SOP("ERROR: Unknown function");
     }
 
@@ -97,6 +101,21 @@ public class c5{
         String retVal = convertDecimalToBinary(theNum);
         if(retVal.equals("ERROR")) SOP("ERROR");
         else SOP("\"" + theNum + "\" in binary is " + retVal );
+    }
+
+    public static void q3(String[] args){
+        //Question 5.3: Given a positive integer, print the next smallest and the next largest number that
+        //have the same number of 1 bits in their binary representation
+        SOP("Q3 not yet implemented. Will be implemented soon");
+    }
+
+    public static void q4(String[] args){
+        //Question 5.4: Explain what the following code does: ((n & (n-1)) == 0)
+        if(args.length != 1){
+            SOP("This question takes no paramters");
+            return;
+        }
+        SOP("\"((n & (n-1)) == 0\" checks if n is a power of 2"  );
     }
 
     public static int insertMIntoN(int n, int m, int i, int j){
