@@ -24,6 +24,7 @@ public class c5{
         SOP("q3\tQuestion 3");
         SOP("q4\tQuestion 4");
         SOP("q5\tQuestion 5");
+        SOP("q6\tQuestion 6");
         SOP("===============================");
         SOP("");
 
@@ -38,6 +39,7 @@ public class c5{
         else if(function.equals("q3")) q3(args);
         else if(function.equals("q4")) q4(args);
         else if(function.equals("q5")) q5(args);
+        else if(function.equals("q6")) q6(args);
         else SOP("ERROR: Unknown function");
     }
 
@@ -121,7 +123,7 @@ public class c5{
         SOP("\"((n & (n-1)) == 0\" checks if n is a power of 2"  );
     }
 
-    public static void q5(String[] args){
+    public static void q5(String[] args) throws Exception{
         //Question 5.5: Write a function to determine the number of bits required to convert integer A
         //to integer B
         SOP("Running q5");
@@ -138,6 +140,19 @@ public class c5{
         }
 
         SOP("The number of bits required to convert \"" + num1 + "\" to \"" + num2 + "\" is " + numBitsToConvertFromNum1ToNum2(num1, num2));   
+    }
+
+    public static void q6(String[] args) throws Exception{
+        //Question 5.6: Write a program to swap odd and even bits in an integer with as few instructions 
+        //as possible (e.g., bit 0 and bit 1 are swapped, bit 2 and bit 3 are swapped, and so on).
+        SOP("Running q6");
+        if(args.length != 2){
+            SOP("Must specify integer");
+            return;
+        }
+
+        int num = Integer.parseInt(args[1]);
+        SOP("\""+ num +"\" with even-odd bits swapped is: " + swapEvenOddBits(num));
     }
 
     public static int insertMIntoN(int n, int m, int i, int j){
@@ -184,6 +199,14 @@ public class c5{
             if(strRep.charAt(i) == '1') count++;
         }
         return count;
+    }
+
+    public static int swapEvenOddBits(int num){
+        //The idea here is to use 10101010101010 as a mask for even and 010101010101 for odd
+        //in hex 0xaaaaaaaa is 10101010101010.... for 32 bit num
+        //0x55555555 is the odd
+
+        return ( ((num & 0xaaaaaaaa) >> 1) | ((num & 0x55555555) << 1) );
     }
 
     //==========UTILITY FUNCTIONS
