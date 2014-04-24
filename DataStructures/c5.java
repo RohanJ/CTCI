@@ -23,6 +23,7 @@ public class c5{
         SOP("q2\tQuestion 2");
         SOP("q3\tQuestion 3");
         SOP("q4\tQuestion 4");
+        SOP("q5\tQuestion 5");
         SOP("===============================");
         SOP("");
 
@@ -36,6 +37,7 @@ public class c5{
         else if(function.equals("q2")) q2(args);
         else if(function.equals("q3")) q3(args);
         else if(function.equals("q4")) q4(args);
+        else if(function.equals("q5")) q5(args);
         else SOP("ERROR: Unknown function");
     }
 
@@ -111,11 +113,31 @@ public class c5{
 
     public static void q4(String[] args){
         //Question 5.4: Explain what the following code does: ((n & (n-1)) == 0)
+        SOP("Running q4");
         if(args.length != 1){
             SOP("This question takes no paramters");
             return;
         }
         SOP("\"((n & (n-1)) == 0\" checks if n is a power of 2"  );
+    }
+
+    public static void q5(String[] args){
+        //Question 5.5: Write a function to determine the number of bits required to convert integer A
+        //to integer B
+        SOP("Running q5");
+        if(args.length != 3){
+            SOP("Must specify two positive integers");
+            return;
+        }
+
+        int num1 = Integer.parseInt(args[1]);
+        int num2 = Integer.parseInt(args[2]);
+        if(num1 < 0 || num2 < 0) {
+            SOP("Number must be positive");
+            return;
+        }
+
+        SOP("The number of bits required to convert \"" + num1 + "\" to \"" + num2 + "\" is " + numBitsToConvertFromNum1ToNum2(num1, num2));   
     }
 
     public static int insertMIntoN(int n, int m, int i, int j){
@@ -152,6 +174,16 @@ public class c5{
             }
         }
         return mSB.toString();
+    }
+
+    public static int numBitsToConvertFromNum1ToNum2(int num1, int num2){
+        int xNum = num1 ^ num2; //this gives us the difference
+        String strRep = Integer.toBinaryString(xNum);
+        int count = 0;
+        for(int i = 0;  i < strRep.length(); i++){
+            if(strRep.charAt(i) == '1') count++;
+        }
+        return count;
     }
 
     //==========UTILITY FUNCTIONS
