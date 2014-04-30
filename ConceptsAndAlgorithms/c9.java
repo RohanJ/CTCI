@@ -22,6 +22,7 @@ public class c9{
         SOP("Possible functions:");
         SOP("fib\tCompute nth fibonacci number");
         SOP("q1\tQuestion 1");
+        SOP("q2\tQuestion 2");
         SOP("===============================");
         SOP("");
 
@@ -33,6 +34,7 @@ public class c9{
         String function = args[0];
         if(function.equals("fib")) fibRunner(args);
         else if(function.equals("q1")) q1(args);
+        else if(function.equals("q2")) q2(args);
         else SOP("ERROR: Unknown function");
 	}
 
@@ -49,6 +51,10 @@ public class c9{
     }
 
     public static void q1(String[] args) throws Exception{
+        //Question 1: A child is running up a staircase with n steps, and can hop either 1 step,
+        //2 steps, or 3 steps at a time. Implement a method to count how many possible ways the
+        //child can run up the stairs.
+        SOP("Running q1");
         if(args.length != 2){
             SOP("ERROR: Must specify n number of steps");
             return;
@@ -58,6 +64,22 @@ public class c9{
         SOP("The number of way the child can run up \"" + n + "\" steps is: " + countWaysChildCanRunUpSteps(n));
     }
 
+    public static void q2(String[] args) throws Exception{
+        //Question 9.2: Imagine a robot sitting on the upper left corner of an X by Y grid. The robot can only
+        //move in two directions: right and down. How many possible paths are there for the robot to go from
+        //(0,0) to (X,Y)?
+        SOP("Running q2");
+        if(args.length != 3){
+            SOP("ERROR: Must specify two integers to represent X and Y coordinates");
+            return;
+        }
+
+        int x = Integer.parseInt(args[1]);
+        int y = Integer.parseInt(args[2]);
+
+        SOP("The number of possible paths for the robot from (0,0) to \"(" + x +"," + y +")\" is: " + possiblePathsForRobot(x, y) );
+    }
+
     public static long countWaysChildCanRunUpSteps(int n){
         if(n<0) return 0;
         if(n==0) return 1;
@@ -65,6 +87,24 @@ public class c9{
         else{
             cache[n] = countWaysChildCanRunUpSteps(n-1) + countWaysChildCanRunUpSteps(n-2) + countWaysChildCanRunUpSteps(n-3);
         }   return cache[n];
+    }
+
+    public static int possiblePathsForRobot(int x, int y){
+        //This question is simply the binomial equation
+        //n choose r = (n!)/( (r! * (n-r)!))
+        //in this case n = x+y
+        //So it becomes, (x+y)! / (x!y!)
+        return (factorial(x+y) / (factorial(x) * factorial(y)));
+    }
+
+    public static int factorial(int num){
+        if(num == 0) return 1;
+        int retVal = 1;
+        while(num>1){
+            retVal*=num;
+            num--;
+        }
+        return retVal;
     }
 
     public static long fib(int num){
