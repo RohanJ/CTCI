@@ -23,6 +23,7 @@ public class c9{
         SOP("fib\tCompute nth fibonacci number");
         SOP("q1\tQuestion 1");
         SOP("q2\tQuestion 2");
+        SOP("q3\tQuestion 3");
         SOP("===============================");
         SOP("");
 
@@ -35,6 +36,7 @@ public class c9{
         if(function.equals("fib")) fibRunner(args);
         else if(function.equals("q1")) q1(args);
         else if(function.equals("q2")) q2(args);
+        else if(function.equals("q3")) q3(args);
         else SOP("ERROR: Unknown function");
 	}
 
@@ -80,6 +82,29 @@ public class c9{
         SOP("The number of possible paths for the robot from (0,0) to \"(" + x +"," + y +")\" is: " + possiblePathsForRobot(x, y) );
     }
 
+    public static void q3(String[] args) throws Exception{
+        //Question 9.3: A magic index in an array A[1....n-1] is defined to be an index such that
+        //A[i] = i. Given a sorted array of distinct integers, write a method to find a magic index,
+        //if one exists, in array A.
+        //Follow up: What if the values are not distinct.
+        SOP("Running q3");
+        if(args.length < 3){
+            SOP("ERROR: Must specify at least two elements for the array");
+            return;
+        }
+
+        int[] mArray = new int[args.length - 1];
+        for(int i = 0; i<args.length-1; i++){
+            mArray[i] = Integer.parseInt(args[i+1]);
+        }
+
+        //determine if sorted, if sorted call findMagicIndex
+        if(!isArraySorted(mArray))
+            Arrays.sort(mArray);
+        
+        SOP("MagicIndex: " + findMagicIndex(mArray, 0, mArray.length-1));
+    }
+
     public static long countWaysChildCanRunUpSteps(int n){
         if(n<0) return 0;
         if(n==0) return 1;
@@ -97,16 +122,20 @@ public class c9{
         return (factorial(x+y) / (factorial(x) * factorial(y)));
     }
 
-    public static int factorial(int num){
-        if(num == 0) return 1;
-        int retVal = 1;
-        while(num>1){
-            retVal*=num;
-            num--;
-        }
-        return retVal;
+    public static int findMagicIndex(int[] array, int i, int j){
+        //Since the array is sorted, we can perform a binary search in log(n) time
+        //WHAT about if elements are not distinct? If elements are not distinct, this
+        //algorithm will not work. Instead we must iterate through each element and search
+        //in O(n) time
+        if(j < i || i < 0 || j >= array.length) return -1;
+        int mid = (i+j)/2;
+        if(array[mid] == mid) return mid;
+
+        if(array[mid] < mid) return findMagicIndex(array, mid+1, j);
+        else return findMagicIndex(array, i, mid-1);
     }
 
+    
     public static long fib(int num){
         if(num == 0) return 0;
         if(num == 1) return 1;
@@ -119,6 +148,22 @@ public class c9{
 
 
     //==========UTILITY FUNCTIONS
+    public static int factorial(int num){
+        if(num == 0) return 1;
+        int retVal = 1;
+        while(num>1){
+            retVal*=num;
+            num--;
+        }
+        return retVal;
+    }
+
+    public static boolean isArraySorted(int[] array){
+        for(int i = 1; i<array.length; i++){
+            if(array[i] < array[i-1]) return false;
+        }
+        return true;
+    }
     public static void SOP(String arg){
         System.out.println(arg);
     }
