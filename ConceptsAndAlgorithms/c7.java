@@ -1,9 +1,9 @@
 /*==========NOTES==========
 @author: Rohan Jyoti
-@compile: javac c5.java
-@run: java c5 [function name] [function arguments]
-@project: Data Structures
-@purpose: Chapter 5 Bit Manipulation
+@compile: javac c7.java
+@run: java c7 [function name] [function arguments]
+@project: Concepts And Algorithms
+@purpose: Chapter 7 Mathematics and Probability
 =========================*/
 
 //==========IMPORTS
@@ -16,7 +16,7 @@ public class c7{
 	public static void main(String[] args) throws Exception{
 		SOP("==========Chapter 7 Mathematics and Probability===");
         SOP("To run: java c7 [function name] [function arguments]");
-        SOP("Example: java c5 isPrime");
+        SOP("Example: java c7 isPrime");
         SOP("");
         SOP("Possible functions:");
         SOP("isPrime\tChecks if number is prime");

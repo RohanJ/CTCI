@@ -2,7 +2,7 @@
 @author: Rohan Jyoti
 @compile: javac c5.java
 @run: java c5 [function name] [function arguments]
-@project: Data Structures
+@project: Concepts And Algorithms
 @purpose: Chapter 5 Bit Manipulation
 =========================*/
 
