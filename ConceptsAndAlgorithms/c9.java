@@ -25,6 +25,7 @@ public class c9{
         SOP("q2\tQuestion 2");
         SOP("q3\tQuestion 3");
         SOP("q4\tQuestion 4");
+        SOP("q5\tQuestion 5");
         SOP("===============================");
         SOP("");
 
@@ -39,6 +40,7 @@ public class c9{
         else if(function.equals("q2")) q2(args);
         else if(function.equals("q3")) q3(args);
         else if(function.equals("q4")) q4(args);
+        else if(function.equals("q5")) q5(args);
         else SOP("ERROR: Unknown function");
 	}
 
@@ -135,6 +137,24 @@ public class c9{
         }
     }
 
+    public static void q5(String[] args) throws Exception{
+        //Question 9.5: Write a method to compute all permutations of a string
+        SOP("Running q5");
+        if(args.length != 2){
+            SOP("ERROR: Must specify string");
+            return;
+        }
+
+        ArrayList<String> mList = computePermuationsOfString(args[1]);
+        SOP("The permuations of \"" + args[1] + "\" are: ");
+        for(String s : mList){
+            SOP2("{"+s+"} ");
+        }
+        SOP("");
+    }
+
+
+
 
     public static long countWaysChildCanRunUpSteps(int n){
         if(n<0) return 0;
@@ -189,6 +209,41 @@ public class c9{
         }
 
         return mPowerSet;
+    }
+
+    public static ArrayList<String> computePermuationsOfString(String str){
+        //Permuatations for a is just a
+        //For ab it is ab and ba
+        //For abc, it is cab, acb, abc, cba, bca, bac
+        //Not we just simply added c into every possible position based off the two strings in ab
+        if(str == null) return null;
+        ArrayList<String> mPerms = new ArrayList<String>();
+        if(str.length() <= 1) mPerms.add(str);
+        else{
+            ArrayList<String> temp = new ArrayList<String>();
+            temp.add(str.substring(0, 1)); //add first char
+            for(int i = 1; i<str.length(); i++){
+                temp = cPOS_helper(temp, str, i);
+            }
+            mPerms.addAll(temp);
+        }
+        return mPerms;
+    }
+
+    public static ArrayList<String> cPOS_helper(ArrayList<String> mList, String str, int index){
+        ArrayList<String> temp = new ArrayList<String>();
+        for(String s : mList){
+            for(int i = 0 ; i<=s.length(); i++){
+                temp.add(insertIntoString(s, str.charAt(index), i));
+            }
+        }
+        return temp;
+    }
+
+    private static String insertIntoString(String str, char c, int pos){
+        String start = str.substring(0, pos);
+        String end = str.substring(pos);
+        return start + c + end;
     }
 
     public static long fib(int num){
