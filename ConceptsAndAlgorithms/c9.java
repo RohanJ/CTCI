@@ -26,6 +26,7 @@ public class c9{
         SOP("q3\tQuestion 3");
         SOP("q4\tQuestion 4");
         SOP("q5\tQuestion 5");
+        SOP("q6\tQuestion 6");
         SOP("===============================");
         SOP("");
 
@@ -41,6 +42,7 @@ public class c9{
         else if(function.equals("q3")) q3(args);
         else if(function.equals("q4")) q4(args);
         else if(function.equals("q5")) q5(args);
+        else if(function.equals("q6")) q6(args);
         else SOP("ERROR: Unknown function");
 	}
 
@@ -153,7 +155,24 @@ public class c9{
         SOP("");
     }
 
+    public static void q6(String[] args) throws Exception{
+        //Question 9.6: Implement an algorithm to print all valid (i.e., properly opened
+        //and closed) combinatins of n-pairs of parentheses.
+        SOP("Running q6");
+        if(args.length != 2){
+            SOP("ERROR: Must specify integer for number of pairs of parentheses");
+            return;
+        }
 
+        int num = Integer.parseInt(args[1]);
+
+        ArrayList<String> mList = combinationsOfParenthesis(num);
+        SOP("All the possible combination for \"" + num +"\" pairs of parentheses are: ");
+        for(String s: mList){
+            SOP2(s+" ");
+        }
+        SOP("");
+    }
 
 
     public static long countWaysChildCanRunUpSteps(int n){
@@ -230,7 +249,7 @@ public class c9{
         return mPerms;
     }
 
-    public static ArrayList<String> cPOS_helper(ArrayList<String> mList, String str, int index){
+    private static ArrayList<String> cPOS_helper(ArrayList<String> mList, String str, int index){
         ArrayList<String> temp = new ArrayList<String>();
         for(String s : mList){
             for(int i = 0 ; i<=s.length(); i++){
@@ -245,6 +264,43 @@ public class c9{
         String end = str.substring(pos);
         return start + c + end;
     }
+
+    private static String insertIntoString(String str, String whatToInsert, int pos){
+        String start = str.substring(0, pos);
+        String end = str.substring(pos);
+        return start + whatToInsert + end;
+    }
+
+    public static ArrayList<String> combinationsOfParenthesis(int n){
+        //()
+        //()() (())
+        //()()() (())() ()(()) (()()) ((()))
+        //Place pair at beinning or each and within every existing pair
+        ArrayList<String> mParens = new ArrayList<String>();
+        if(n == 1){
+            mParens.add("()");
+        }
+        else{
+            ArrayList<String> temp = new ArrayList<String>();
+            temp.add("()");
+            for(int i = 1; i<n; i++){
+                temp = cOP_helper(temp, i);
+            }
+            mParens.addAll(temp);
+        }
+        return mParens;
+    }
+
+    public static ArrayList<String> cOP_helper(ArrayList<String> mList, int num){
+        ArrayList<String> temp = new ArrayList<String>();
+        for(String s : mList){
+            for(int i=0; i<s.length(); i++){
+                temp.add(insertIntoString(s, "()", i));
+            }
+        }
+        return temp;
+    }
+
 
     public static long fib(int num){
         if(num == 0) return 0;
