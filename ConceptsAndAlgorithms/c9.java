@@ -13,6 +13,7 @@ import java.lang.String;
 
 public class c9{
     private static long[] cache = new long[100000];
+    private static final int QUARTER = 25, DIME = 10, NICKEL = 5, PENNY = 1;
 
 	public static void main(String[] args) throws Exception{
 		SOP("==========Chapter 9 Recursion And Dynamic Programming===");
@@ -27,6 +28,7 @@ public class c9{
         SOP("q4\tQuestion 4");
         SOP("q5\tQuestion 5");
         SOP("q6\tQuestion 6");
+        SOP("q8\tQuestion 8");
         SOP("===============================");
         SOP("");
 
@@ -43,6 +45,7 @@ public class c9{
         else if(function.equals("q4")) q4(args);
         else if(function.equals("q5")) q5(args);
         else if(function.equals("q6")) q6(args);
+        else if(function.equals("q8")) q8(args);
         else SOP("ERROR: Unknown function");
 	}
 
@@ -175,6 +178,23 @@ public class c9{
     }
 
 
+    public static void q8(String[] args) throws Exception{
+        //Question 9.8: Given an infinite number of quarters (25 cents), dimes (10 cents), 
+        //nickels (5 cents) and pennies (1 cent), write code to calculate the number of ways
+        //representing n cents.
+        SOP("Running q8");
+        if(args.length != 2){
+            SOP("ERROR: Must specify integer for n cents");
+            return;
+        }
+
+        int num = Integer.parseInt(args[1]);
+
+        int numWays = calculateNumberOfWaysToGetChange(num, QUARTER);
+        SOP(numWays + " number of ways for \"" + num + "\" cents.");
+    }
+
+
     public static long countWaysChildCanRunUpSteps(int n){
         if(n<0) return 0;
         if(n==0) return 1;
@@ -299,6 +319,20 @@ public class c9{
             }
         }
         return temp;
+    }
+
+    public static int calculateNumberOfWaysToGetChange(int num, int type){
+        int next_type = 0;
+        if(type == QUARTER) next_type = DIME;
+        else if(type == DIME) next_type = NICKEL;
+        else if(type == NICKEL) next_type = PENNY;
+        else if(type == PENNY) return PENNY;
+
+        int ways = 0;
+        for(int i = 0; i * type <= num; i++){
+            ways += calculateNumberOfWaysToGetChange(num - i * type, next_type);
+        }
+        return ways;
     }
 
 
