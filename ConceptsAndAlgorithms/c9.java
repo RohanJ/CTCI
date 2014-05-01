@@ -24,6 +24,7 @@ public class c9{
         SOP("q1\tQuestion 1");
         SOP("q2\tQuestion 2");
         SOP("q3\tQuestion 3");
+        SOP("q4\tQuestion 4");
         SOP("===============================");
         SOP("");
 
@@ -37,6 +38,7 @@ public class c9{
         else if(function.equals("q1")) q1(args);
         else if(function.equals("q2")) q2(args);
         else if(function.equals("q3")) q3(args);
+        else if(function.equals("q4")) q4(args);
         else SOP("ERROR: Unknown function");
 	}
 
@@ -105,6 +107,35 @@ public class c9{
         SOP("MagicIndex: " + findMagicIndex(mArray, 0, mArray.length-1));
     }
 
+    public static void q4(String[] args) throws Exception{
+        //Question 9.4: Write a method to return all subsets of a set
+        SOP("Running q4");
+        if(args.length < 2){
+            SOP("ERROR: Must specify at least one element for the set");
+            return;
+        }
+
+        int[] mArray = new int[args.length - 1];
+        for(int i = 0; i<args.length-1; i++){
+            mArray[i] = Integer.parseInt(args[i+1]);
+        }
+
+        ArrayList<ArrayList<Integer>> mPowerSet = computePowerSet(mArray);
+        if(mPowerSet == null) SOP("ERROR: null powerset");
+        else{
+            SOP("Powerset of provided set:");
+            for(ArrayList<Integer> mList : mPowerSet){
+                SOP2("{");
+                for(Integer i : mList){
+                    SOP2(i+" ");
+                }
+                SOP2("} ");
+            }
+            SOP("");
+        }
+    }
+
+
     public static long countWaysChildCanRunUpSteps(int n){
         if(n<0) return 0;
         if(n==0) return 1;
@@ -135,7 +166,31 @@ public class c9{
         else return findMagicIndex(array, i, mid-1);
     }
 
-    
+    public static ArrayList<ArrayList<Integer>> computePowerSet(int[] set){
+        //Computing the powerset is O(2^n)
+        //Notice what the Powersetof 2 is: P(2) = {}, {1}, {2}, {1,2}
+        //And the powerset of three is: P(3) = {}, {1}, {2}, {1,2}, {3}, {1,3}, {2,3}, {1,2,3}
+        //In other words, P(3) is P(2) with the elements duplicated and 3 added in
+        ArrayList<ArrayList<Integer>> mPowerSet = new ArrayList<ArrayList<Integer>>();
+        mPowerSet.add(new ArrayList<Integer>());
+        
+        for(int i = 0; i<set.length; i++){
+            //temp is for java.util.ConcurrentModificationException error
+            ArrayList<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer>>();
+
+            for(ArrayList<Integer> subset : mPowerSet){
+                ArrayList<Integer> newSubset = new ArrayList<Integer>();
+                newSubset.addAll(subset);
+                newSubset.add(set[i]); //add the current element in
+                temp.add(newSubset);
+            }
+
+            mPowerSet.addAll(temp);
+        }
+
+        return mPowerSet;
+    }
+
     public static long fib(int num){
         if(num == 0) return 0;
         if(num == 1) return 1;
