@@ -12,6 +12,27 @@ import java.lang.String;
 //==========
 
 public class c11{
+	public static class Person implements Comparable{
+		int height;
+		int weight;
+		public Person(int height, int weight){
+			this.height = height;
+			this.weight = weight;
+		}
+		public String toString(){
+			return "(height: " + height + ", weight: " + weight+")";
+		}
+
+		public int compareTo(Object s){
+			Person second = (Person)s;
+			if(this.height != second.height){
+				return ((Integer)this.height).compareTo(second.height);
+			}
+			else{
+				return ((Integer)this.weight).compareTo(second.weight);
+			}
+		}
+	}
 
 	public static void main(String[] args) throws Exception{
 		SOP("==========Chapter 11 Sorting and Searching===");
@@ -28,6 +49,8 @@ public class c11{
         SOP("q4\tQuestion 4");
         SOP("q5\tQuestion 5");
         SOP("q6\tQuestion 6");
+        SOP("q7\tQuestion 7");
+        SOP("LIS\tLongest Increasing Subsequence");
         SOP("===============================");
         SOP("");
 
@@ -46,6 +69,8 @@ public class c11{
         else if(function.equals("q4")) runQ4(args);
         else if(function.equals("q5")) runQ5(args);
         else if(function.equals("q6")) runQ6(args);
+        else if(function.equals("q7")) runQ7(args);
+        else if(function.equals("LIS")) runLIS(args);
         else SOP("ERROR: Unknown function");
 	}
 
@@ -381,6 +406,104 @@ public class c11{
 
 		//If we reach here, we know the element was not found
 		SOP("Element \"" + element +"\" was not found");
+	}
+
+	public static void runQ7(String[] args){
+		//Question 11.7: Given a set of peoople, sort them by weight and height such that
+		//the person before the next weighs less and is shorter
+
+		//Assumptions: Height is in inches and Weight is in pounds
+		//Each Person Obect will be P(height, weight);
+		ArrayList<Person> mList = new ArrayList<Person>();
+		mList.add(new Person(65, 150));
+		mList.add(new Person(64, 140));
+		mList.add(new Person(72, 186));
+		mList.add(new Person(62, 120));
+		mList.add(new Person(73, 190));
+		longestIncreasingSubsequenceInPairs(mList);
+	}
+
+	public static void longestIncreasingSubsequenceInPairs(ArrayList<Person> mPersons){
+		//This problem is very similar to LIS, except with a twist. We will first sort 
+		//according to height, and then perform LIS on the weight
+		Collections.sort(mPersons);
+
+		//next we run custom LIS
+		int[] sizes = new int[mPersons.size()];
+		String[] paths = new String[mPersons.size()];
+
+		//First we init both sizes and paths
+		for(int i = 0; i < mPersons.size(); i++){
+			sizes[i] = 1;
+			paths[i] = "P"+ i + "" + mPersons.get(i).toString() + " ";
+		}
+
+		//Then we use dynamic programming to build subsequences
+		for(int i = 1; i < mPersons.size(); i++){
+			for(int j=0; j<i; j++){
+				if(mPersons.get(i).weight > mPersons.get(j).weight && sizes[i] < sizes[j] + 1){
+					sizes[i] = sizes[j] + 1;
+					paths[i] = paths[j] + "P"+ i + "" + mPersons.get(i).toString() + " ";
+				}
+			}
+		}
+
+		//Finally we print the longest increasing subsequence
+		int maxLength = 0, maxIndex = 0;
+		for(int i=0; i<sizes.length; i++){
+			if(maxLength < sizes[i]){
+				maxLength = sizes[i];
+				maxIndex = i;
+			}
+		}
+		SOP("LIS: " + paths[maxIndex]);
+
+	}
+
+	public static void runLIS(String[] args){
+		if(args.length < 3){
+			SOP("Must specify at least two integers");
+			return;
+		}
+
+		ArrayList<Integer> mList = generateListFromArgs(args);
+		Integer[] mArray = mList.toArray(new Integer[mList.size()]);
+		LIS(mArray);
+	}
+
+	public static void LIS(Integer[] mArray){
+		//This will implement the Longest Increasing Subsequence algorithm using
+		//Dynamic Programming in O(n^2) time
+
+		int[] sizes = new int[mArray.length];
+		String[] paths = new String[mArray.length];
+
+		//First we init both sizes and paths
+		for(int i = 0; i < mArray.length; i++){
+			sizes[i] = 1;
+			paths[i] = mArray[i] + " ";
+		}
+
+		//Then we use dynamic programming to build subsequences
+		for(int i = 1; i < mArray.length; i++){
+			for(int j=0; j<i; j++){
+				if(mArray[i] > mArray[j] && sizes[i] < sizes[j] + 1){
+					sizes[i] = sizes[j] + 1;
+					paths[i] = paths[j] + mArray[i] + " ";
+				}
+			}
+		}
+
+		//Finally we print the longest increasing subsequence
+		int maxLength = 0, maxIndex = 0;
+		for(int i=0; i<sizes.length; i++){
+			if(maxLength < sizes[i]){
+				maxLength = sizes[i];
+				maxIndex = i;
+			}
+		}
+		SOP("LIS: " + paths[maxIndex]);
+
 	}
 
 
