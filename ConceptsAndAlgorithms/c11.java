@@ -24,6 +24,8 @@ public class c11{
         SOP("selectionsort\tSelectionsort");
         SOP("melectionsort\tMelectionsort");
         SOP("q1\tQuestion 1");
+        SOP("q3\tQuestion 3");
+        SOP("q4\tQuestion 4");
         SOP("===============================");
         SOP("");
 
@@ -38,6 +40,8 @@ public class c11{
         else if(function.equals("selectionsort")) runSelectionsort(args);
         else if(function.equals("mergesort")) runMergesort(args);
         else if(function.equals("q1")) runQ1(args);
+        else if(function.equals("q3")) runQ3(args);
+        else if(function.equals("q4")) runQ4(args);
         else SOP("ERROR: Unknown function");
 	}
 
@@ -253,6 +257,80 @@ public class c11{
 		return A;
 	}
 
+	public static void runQ3(String[] args){
+		//Question 11.3: Given a sorted array of n integers that has been rotated an
+		//unknown number of times, write code to find an element in the array. You may
+		//assume that the array was originally sorted in increasing order.
+		Integer[] mArray = new Integer[]{10, 15, 20, 0, 5};
+		printList("Original mArray", mArray);
+		int element = 0;
+		int pos = findElementInRotatedSortedArray(mArray, 0, mArray.length -1, element);
+		SOP("Position: " + pos);
+	}
+
+	public static int findElementInRotatedSortedArray(Integer[] mArray, int start, int end, int element){
+		//This is a basic binary search question (with a twist). It can
+		//be solved in O(log n) time.
+		//10, 15, 20, 0, 5
+		int mid = (start + end) / 2;
+		if(mArray[mid] == element) return mid;
+		if(end < start) return -1;
+
+		if(mArray[start] < mArray[mid]){
+			//then we know the left side is properly sorted
+			if(mArray[start] <= element && element <= mArray[mid]){
+				return findElementInRotatedSortedArray(mArray, 0, mid -1, element); //explore left
+			}
+			else{
+				return findElementInRotatedSortedArray(mArray, mid+1, end, element); //explore right
+			} 
+		}
+		else if(mArray[start] > mArray[mid]){
+			//then we know the right side is properly sorted
+			if(mArray[mid] <= element && element <= mArray[end]){
+				return findElementInRotatedSortedArray(mArray, mid+1, end, element);
+			}
+			else{
+				return findElementInRotatedSortedArray(mArray, start, mid-1, element);
+			}
+		}
+		else if(mArray[start] == mArray[mid]){
+			if(mArray[mid] != mArray[end]){
+				return findElementInRotatedSortedArray(mArray, mid +1, end, element);
+			}
+			else{
+				int ret = findElementInRotatedSortedArray(mArray, start, mid-1, element);
+				if(ret==-1){
+					return findElementInRotatedSortedArray(mArray, mid+1, end, element);
+				}
+				else return ret;
+			}
+		}
+		return -1;
+	}
+
+	public static void runQ4(String[] args){
+		//Question 11.4: Imagine you have a 20 GB file with one string per line.
+		//Explain how you would sort the file
+
+		SOP("See cource code for answer");
+		//We can employ the idea behind merge sort to do this. In essence, we will
+		//break apart the 20GB file into much more manageable chunks, sort them individually
+		//and then merge the results in order.
+	}
+
+	public static void runQ5(String[] args){
+		//Question 11.5: Given a sorted array of strings which is interspersed with empty strings,
+		//write a method to find the location of a given string.
+		
+
+		SOP("See cource code for answer");
+		//Again, we use the idea behind binary search to solve this in O(log n)
+		//The twist here is the empty string. All we have to do is simply move mid to the closest
+		//non empty string.
+
+		//Note that this has best case O(log n) but worst case is O(n).
+	}
 
 
 	//==================Helper Functions
