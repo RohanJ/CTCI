@@ -26,6 +26,8 @@ public class c11{
         SOP("q1\tQuestion 1");
         SOP("q3\tQuestion 3");
         SOP("q4\tQuestion 4");
+        SOP("q5\tQuestion 5");
+        SOP("q6\tQuestion 6");
         SOP("===============================");
         SOP("");
 
@@ -42,6 +44,8 @@ public class c11{
         else if(function.equals("q1")) runQ1(args);
         else if(function.equals("q3")) runQ3(args);
         else if(function.equals("q4")) runQ4(args);
+        else if(function.equals("q5")) runQ5(args);
+        else if(function.equals("q6")) runQ6(args);
         else SOP("ERROR: Unknown function");
 	}
 
@@ -332,8 +336,63 @@ public class c11{
 		//Note that this has best case O(log n) but worst case is O(n).
 	}
 
+	public static void runQ6(String[] args){
+		//Question 11.6:Given a M by N matrix in which each row and each column is sorted in 
+		//ascending order, write a method to find an element
+
+		int numRows = 4, numColumns = 4;
+		int[][] matrix = new int[numRows][numColumns];
+		// 15	20 	40	85 
+		// 20 	35 	80 	95
+		// 30 	55 	95 	105
+		// 40 	80 	100 120
+		matrix[0][0] = 15; matrix[0][1] = 20; matrix[0][2] = 40; matrix[0][3] = 85;
+		matrix[1][0] = 20; matrix[1][1] = 35; matrix[1][2] = 80; matrix[1][3] = 95;
+		matrix[2][0] = 30; matrix[2][1] = 55; matrix[2][2] = 95; matrix[2][3] = 105;
+		matrix[3][0] = 40; matrix[3][1] = 80; matrix[3][2] = 100; matrix[3][3] = 120;
+
+		int element = 55;
+		SOP("Find "+ element +" in the following matrix: ");
+		printMatrix(matrix);
+		findElementInSortedRowsAndColumnsMatrix(matrix, element);
+
+	}
+
+	public static void findElementInSortedRowsAndColumnsMatrix(int[][] matrix, int element){
+		//The idea here is based off the following observations:
+		//If the value at the top of the column, is greater than the element, we move a column down
+		//If the start of the room value is less than the element, we move a row down
+		//The opposite is true for each as well
+		//This is solvable in O(m log n)
+
+		int row = 0, column = matrix[0].length -1, totalRows = matrix.length;
+		while(row < totalRows && column >= 0){
+			if(matrix[row][column] == element){
+				SOP("Element found at (row, column): (" + row +", " + column +")");
+				return;
+			}
+			else if(matrix[row][column] > element){
+				column--;
+			}
+			else{
+				row++;
+			}
+		}
+
+		//If we reach here, we know the element was not found
+		SOP("Element \"" + element +"\" was not found");
+	}
+
 
 	//==================Helper Functions
+	public static void printMatrix(int[][] matrix){
+		for(int row = 0; row < matrix.length; row++){
+			for(int column = 0; column < matrix[0].length; column++){
+				SOP2(matrix[row][column]+"\t");
+			}
+			SOP("");
+		}
+	}
 
 	public static ArrayList<Integer> generateListFromArgs(String[] args){
 		ArrayList<Integer> mList = new ArrayList<Integer>();
