@@ -51,6 +51,7 @@ public class c11{
         SOP("q6\tQuestion 6");
         SOP("q7\tQuestion 7");
         SOP("LIS\tLongest Increasing Subsequence");
+        SOP("LISum\tLongest Increasing Sum");
         SOP("===============================");
         SOP("");
 
@@ -71,6 +72,8 @@ public class c11{
         else if(function.equals("q6")) runQ6(args);
         else if(function.equals("q7")) runQ7(args);
         else if(function.equals("LIS")) runLIS(args);
+        else if(function.equals("LISum")) runLISum(args);
+        else if(function.equals("m1")) runHiddenFunction1(args);
         else SOP("ERROR: Unknown function");
 	}
 
@@ -504,6 +507,71 @@ public class c11{
 		}
 		SOP("LIS: " + paths[maxIndex]);
 
+	}
+
+	public static void runLISum(String[] args){
+		if(args.length < 3){
+			SOP("Must specify at least two integers");
+			return;
+		}
+
+		ArrayList<Integer> mList = generateListFromArgs(args);
+		Integer[] mArray = mList.toArray(new Integer[mList.size()]);
+		LISum(mArray);
+	}
+
+	public static void LISum(Integer[] mArray){
+		//This will implement the Longest Increasing Sum algorithm
+
+		int maxSum = 0;
+		int sum = 0;
+		for(int i=0; i<mArray.length; i++){
+			sum += mArray[i];
+			if(maxSum < sum){
+				maxSum = sum;
+			}
+			else if(sum < 0){
+				sum = 0;
+			}
+		}
+
+		SOP("MaxSum: " + maxSum);
+
+	}
+
+	public static void runHiddenFunction1(String[] args){
+		if(args.length < 2){
+			SOP("Must specify N");
+			return;
+		}
+
+		int N = Integer.parseInt(args[1]);
+		SOP("Number of trailing zeros in \"" + N + "\" factorial: " + calculateNumberOfTrailingZerosInFactorial(N));
+
+	}
+
+	public static int calculateNumberOfTrailingZerosInFactorial(int N){
+		int countTwo = 0, countFive=0;
+		for(int i = 1; i<=N; i++){
+			if(i%2==0){
+				countTwo++;
+				int temp = i;
+				while((temp/2)%2 == 0){
+					countTwo++;
+					temp/=2;
+				}
+			}
+			if(i%5==0){ 
+				countFive++;
+				int temp = i;
+				while((temp/5)%5 == 0){
+					countFive++;
+					temp/=5;
+				}
+			}
+		}
+
+		return Math.min(countTwo, countFive);
 	}
 
 
